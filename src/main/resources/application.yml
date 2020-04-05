@@ -3,3 +3,7 @@ spring:
     jndi-name: jms/myConnectionFactory
     template:
       default-destination: jms/myTestQueue
+
+jms:
+  queue:
+    jndi-name: jms/myTestDq
