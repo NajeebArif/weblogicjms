@@ -18,7 +18,16 @@ public class JmsQueueListener {
 
     @JmsListener(destination = "jms/myTestQueue")
     public void listenToMessages(@Valid CustomMsg customMsg){
-        String text = "MESSAGE RECEIVED AT: "+ LocalDateTime.now()+". MSG: "+customMsg;
+        logTheCustomMsg(customMsg);
+    }
+
+    @JmsListener(destination = "${jms.queue.jndi-name}")
+    public void receiveDistributedQueueMsg(@Valid CustomMsg customMsg){
+        logTheCustomMsg(customMsg);
+    }
+
+    private void logTheCustomMsg(@Valid CustomMsg customMsg) {
+        String text = "MESSAGE RECEIVED AT: " + LocalDateTime.now() + ". MSG: " + customMsg;
         LOGGER.info(text);
     }
 }
