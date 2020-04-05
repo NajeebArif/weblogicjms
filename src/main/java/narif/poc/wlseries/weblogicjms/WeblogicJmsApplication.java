@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfigura
 import org.springframework.jms.annotation.EnableJms;
 
 @SpringBootApplication(exclude = ActiveMQAutoConfiguration.class)
+@EnableJms
 public class WeblogicJmsApplication {
 
 	public static void main(String[] args) {

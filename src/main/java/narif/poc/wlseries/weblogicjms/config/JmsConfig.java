@@ -1,9 +1,10 @@
 package narif.poc.wlseries.weblogicjms.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -14,6 +15,16 @@ import javax.jms.ConnectionFactory;
 public class JmsConfig {
 
     @Bean
+    public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
+                                                    DefaultJmsListenerContainerFactoryConfigurer configurer){
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setSessionTransacted(true);
+        factory.setConcurrency("3-10");
+        configurer.configure(factory, connectionFactory);
+        return factory;
+    }
+
+    @Bean
     public MessageConverter jacksonJmsMessageConverter(){
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
@@ -21,10 +32,4 @@ public class JmsConfig {
         return converter;
     }
 
-    @Bean
-    public JmsTemplate jmsTemplate(){
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setDefaultDestinationName("jms/myTestQueue");
-        return jmsTemplate;
-    }
 }
